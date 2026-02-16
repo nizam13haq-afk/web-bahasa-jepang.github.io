@@ -3,296 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Belajar Bahasa Jepang Pemula | Hiragana Katakana Quiz</title>
-
-<meta name="description" content="Website belajar bahasa Jepang untuk pemula lengkap dengan hiragana, katakana, kosakata lengkap, dan quiz interaktif.">
-<meta name="keywords" content="belajar bahasa jepang, hiragana, katakana, kosakata jepang, quiz jepang">
-<meta name="author" content="Nizam">
-
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
+<title>Mirrors Demo - Dark Cinematic Player</title>
+<meta name="description" content="Dark cinematic lyrics player demo">
 
 <style>
-html{scroll-behavior:smooth;}
-:root{
---primary:#ff4e88;
---secondary:#6c63ff;
---bg:#f4f6ff;
---card:#ffffff;
---text:#222;
-}
-body.dark{
---bg:#1e1e2f;
---card:#2c2c3f;
---text:#fff;
-}
-body{
+*{
 margin:0;
-font-family:Segoe UI,sans-serif;
-background:var(--bg);
-color:var(--text);
-transition:.3s;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
-header{
-background:linear-gradient(90deg,var(--primary),var(--secondary));
-color:white;
+
+body{
+background:radial-gradient(circle at center,#1a1a1a,#0a0a0a 70%);
+color:#e0e0e0;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
 padding:20px;
+overflow-x:hidden;
+transition:background 1s;
+}
+
+.container{
+width:100%;
+max-width:920px;
+background:rgba(25,25,25,0.95);
+backdrop-filter:blur(25px);
+padding:30px;
+border-radius:30px;
+box-shadow:0 0 60px rgba(0,0,0,0.9);
+transition:0.5s;
+}
+
+/* PLAYER */
+.player{
+display:flex;
+gap:40px;
+align-items:center;
+flex-wrap:wrap;
+justify-content:center;
 text-align:center;
 }
-.container{max-width:1200px;margin:auto;padding:20px;}
-section{
-background:var(--card);
-padding:20px;
-margin-top:20px;
-border-radius:15px;
-box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
-button{
-padding:8px 14px;
-border:none;
-border-radius:8px;
+
+.player img{
+width:220px;
+height:220px;
+border-radius:50%;
+object-fit:cover;
 cursor:pointer;
-margin:5px;
-font-weight:bold;
-background:var(--secondary);
-color:white;
-transition:.2s;
+transition:0.6s;
+box-shadow:0 0 40px rgba(255,255,255,0.08);
+filter:grayscale(100%);
 }
-button:hover{transform:scale(1.05);}
-.card{
-padding:8px;
-margin:6px 0;
-border-radius:8px;
-background:rgba(0,0,0,.05);
-cursor:pointer;
-transition:.2s;
+
+.player img:hover{
+transform:scale(1.05);
 }
-.card:hover{transform:scale(1.02);}
-.progress{
-height:15px;
-background:#ddd;
+
+.rotating{
+animation:spin 20s linear infinite;
+}
+
+@keyframes spin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
+.info{
+flex:1;
+min-width:250px;
+opacity:0;
+transform:translateY(20px);
+transition:0.6s;
+}
+
+.info.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.info h2{
+font-size:26px;
+letter-spacing:1px;
+}
+
+.info p{
+opacity:0.5;
+margin:8px 0 18px;
+font-size:14px;
+}
+
+.progress-bar{
+height:6px;
+background:#333;
 border-radius:10px;
 overflow:hidden;
 }
-.bar{
+
+.progress{
 height:100%;
 width:0%;
-background:var(--primary);
-transition:.3s;
+background:linear-gradient(90deg,#aaa,#fff);
+transition:0.05s linear;
 }
-#toast{
-position:fixed;
-bottom:20px;
-right:20px;
-background:var(--primary);
-color:white;
-padding:10px 20px;
-border-radius:10px;
+
+/* LYRICS */
+.lyrics{
+margin-top:35px;
+height:250px;
+overflow-y:auto;
+padding:20px;
+background:#111;
+border-radius:25px;
+scroll-behavior:smooth;
 opacity:0;
-transition:.3s;
+transform:translateY(30px);
+transition:0.7s;
+}
+
+.lyrics.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.line{
+opacity:0.25;
+transition:0.3s;
+padding:8px 0;
+font-size:14px;
+}
+
+.line.active{
+opacity:1;
+color:#ffffff;
+font-weight:bold;
+font-size:17px;
+text-shadow:0 0 15px rgba(255,255,255,0.4);
+transform:scale(1.03);
+}
+
+/* SCROLLBAR */
+.lyrics::-webkit-scrollbar{width:5px;}
+.lyrics::-webkit-scrollbar-thumb{
+background:#666;
+border-radius:10px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+.container{
+padding:20px;
+border-radius:25px;
+}
+.player{
+flex-direction:column;
+gap:20px;
+}
+.player img{
+width:180px;
+height:180px;
+}
+.info h2{
+font-size:20px;
+}
+.lyrics{
+height:220px;
+}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>🇯🇵 Web Belajar Bahasa Jepang Pemula</h1>
-<button onclick="toggleDark()">🌙 Mode</button>
-</header>
-
 <div class="container">
 
-<section>
-<h2>🔥 Profile</h2>
-XP: <span id="xp">0</span> |
-Level: <span id="level">1</span>
-<div class="progress"><div class="bar" id="xpBar"></div></div>
-</section>
+<div class="player">
+<img src="cover.jpg" id="cover" alt="cover">
+<div class="info" id="info">
+<h2>Mirrors (Demo)</h2>
+<p>Overtonight</p>
+<div class="progress-bar">
+<div class="progress" id="progress"></div>
+</div>
+</div>
+</div>
 
-<section>
-<h2>📚 Kosakata Lengkap</h2>
-<input placeholder="Cari..." oninput="searchWord(this.value)">
-<div id="vocabBox"></div>
-</section>
+<div class="lyrics" id="lyrics">
 
-<section>
-<h2>🧠 Quiz</h2>
-<h3 id="quizQ"></h3>
-<div id="quizA"></div>
-</section>
-
-<section>
-<h2>🔤 Hiragana</h2>
-<div id="hiraganaBox"></div>
-</section>
-
-<section>
-<h2>🔡 Katakana</h2>
-<div id="katakanaBox"></div>
-</section>
+<div class="line" data-time="0">Take down all the mirrors in my house, I hate my nose, eyes and my mouth</div>
+<div class="line" data-time="4">I hate the jokes I laugh about, I hate the hoes I'm sad about</div>
+<div class="line" data-time="8">She calls up my phone, ringing, ringing, ringing, ringing</div>
+<div class="line" data-time="10">Baby, just leave me alone</div>
+<div class="line" data-time="12">She saw all my flaws</div>
+<div class="line" data-time="13.5">Baby, won't you tell me what I'm doing wrong?</div>
+<div class="line" data-time="16">Ooh, I hate the feeling of my doubts</div>
+<div class="line" data-time="19">So I wanna die on top of my couch</div>
+<div class="line" data-time="21">Oh well, oh well, oh well</div>
+<div class="line" data-time="24">What do you want from me?</div>
+<div class="line" data-time="26">I'm never ever good for anything</div>
+<div class="line" data-time="28">Why do you talk to me?</div>
+<div class="line" data-time="30">I'm never ever buying a wedding ring</div>
+<div class="line" data-time="33.3">Ooh, I have a question</div>
+<div class="line" data-time="37.3">I'm like, "Ooh, I have a question"</div>
+<div class="line" data-time="40">How do I really even matter to you</div>
+<div class="line" data-time="43.5">When you was outside laughing with another dude?</div>
 
 </div>
 
-<div id="toast">Jawaban Benar! +10 XP</div>
+<audio id="audio" preload="metadata">
+<source src="lagu.mp3" type="audio/mpeg">
+</audio>
+
+</div>
 
 <script>
+const audio = document.getElementById("audio");
+const cover = document.getElementById("cover");
+const progress = document.getElementById("progress");
+const lyricsBox = document.getElementById("lyrics");
+const info = document.getElementById("info");
 
-// DARK MODE
-if(localStorage.getItem("dark")=="true"){
-document.body.classList.add("dark");
+let lines = Array.from(document.querySelectorAll(".line"));
+lines.sort((a,b)=>a.dataset.time - b.dataset.time);
+
+let started=false;
+let currentIndex=-1;
+
+cover.addEventListener("click",()=>{
+if(!started){
+audio.play();
+cover.classList.add("rotating");
+lyricsBox.classList.add("show");
+info.classList.add("show");
+started=true;
+}else{
+if(audio.paused){
+audio.play();
+cover.classList.add("rotating");
+}else{
+audio.pause();
+cover.classList.remove("rotating");
 }
-function toggleDark(){
-document.body.classList.toggle("dark");
-localStorage.setItem("dark",document.body.classList.contains("dark"));
 }
-
-// ===================== VOCAB =====================
-let vocabData = [];
-
-const kategori = {
-"Warna":[["くろ","hitam"],["しろ","putih"],["あか","merah"],["あお","biru"],["きいろ","kuning"],["みどり","hijau"]],
-"Keluarga":[["おとうさん","ayah"],["おかあさん","ibu"],["あに","kakak laki-laki"],["あね","kakak perempuan"],["いもうと","adik perempuan"]],
-"Sekolah":[["がっこう","sekolah"],["せんせい","guru"],["がくせい","murid"],["ほん","buku"],["えんぴつ","pensil"]],
-"Makanan":[["ごはん","nasi"],["パン","roti"],["みず","air"],["さかな","ikan"],["にく","daging"]],
-"Angka":[["いち","satu"],["に","dua"],["さん","tiga"],["よん","empat"],["ご","lima"]],
-"Kata Kerja":[["たべる","makan"],["のむ","minum"],["いく","pergi"],["みる","melihat"],["かく","menulis"]],
-"Sifat":[["おおきい","besar"],["ちいさい","kecil"],["あつい","panas"],["さむい","dingin"],["たのしい","menyenangkan"]],
-"Transportasi":[["くるま","mobil"],["でんしゃ","kereta"],["ひこうき","pesawat"],["バス","bus"]],
-"Cuaca":[["はれ","cerah"],["あめ","hujan"],["ゆき","salju"],["くもり","berawan"]]
-};
-
-for(let k in kategori){
-kategori[k].forEach(kata=>vocabData.push(kata));
-}
-
-// LOAD VOCAB
-function loadVocab(list=vocabData){
-vocabBox.innerHTML="";
-list.forEach(v=>{
-let div=document.createElement("div");
-div.className="card";
-div.innerHTML="<b>"+v[0]+"</b> - "+v[1];
-div.onclick=()=>speak(v[0]);
-vocabBox.appendChild(div);
 });
-}
-loadVocab();
 
-function searchWord(q){
-q=q.toLowerCase();
-let filtered=vocabData.filter(v=>
-v[0].includes(q)||v[1].toLowerCase().includes(q)
-);
-loadVocab(filtered);
+audio.addEventListener("timeupdate",()=>{
+let currentTime=audio.currentTime;
+
+if(audio.duration){
+progress.style.width=(currentTime/audio.duration)*100+"%";
 }
 
-// ===================== QUIZ =====================
-function loadQuiz(){
-let r=vocabData[Math.floor(Math.random()*vocabData.length)];
-quizQ.innerText="Arti dari "+r[0]+" ?";
-quizA.innerHTML="";
-let options=[r];
-while(options.length<4){
-let rand=vocabData[Math.floor(Math.random()*vocabData.length)];
-if(!options.includes(rand)) options.push(rand);
-}
-options.sort(()=>0.5-Math.random());
-options.forEach(opt=>{
-let b=document.createElement("button");
-b.innerText=opt[1];
-b.onclick=()=>{
-if(opt[1]==r[1]){ addXP(10); showToast(); }
-loadQuiz();
-};
-quizA.appendChild(b);
+for(let i=0;i<lines.length;i++){
+let lineTime=parseFloat(lines[i].dataset.time);
+let nextTime=i+1<lines.length?parseFloat(lines[i+1].dataset.time):999;
+
+if(currentTime>=lineTime && currentTime<nextTime){
+if(currentIndex!==i){
+lines.forEach(l=>l.classList.remove("active"));
+lines[i].classList.add("active");
+
+lyricsBox.scrollTo({
+top:lines[i].offsetTop-lyricsBox.clientHeight/2,
+behavior:"smooth"
 });
+
+currentIndex=i;
 }
-loadQuiz();
-
-// ===================== HIRAGANA =====================
-const hiragana=[
-["あ","a"],["い","i"],["う","u"],["え","e"],["お","o"],
-["か","ka"],["き","ki"],["く","ku"],["け","ke"],["こ","ko"],
-["さ","sa"],["し","shi"],["す","su"],["せ","se"],["そ","so"],
-["た","ta"],["ち","chi"],["つ","tsu"],["て","te"],["と","to"],
-["な","na"],["に","ni"],["ぬ","nu"],["ね","ne"],["の","no"],
-["は","ha"],["ひ","hi"],["ふ","fu"],["へ","he"],["ほ","ho"],
-["ま","ma"],["み","mi"],["む","mu"],["め","me"],["も","mo"],
-["や","ya"],["ゆ","yu"],["よ","yo"],
-["ら","ra"],["り","ri"],["る","ru"],["れ","re"],["ろ","ro"],
-["わ","wa"],["を","wo"],["ん","n"]
-];
-
-function loadHiragana(){
-hiraganaBox.innerHTML="";
-hiragana.forEach(h=>{
-let div=document.createElement("div");
-div.className="card";
-div.innerHTML="<b style='font-size:22px'>"+h[0]+"</b> - "+h[1];
-div.onclick=()=>speak(h[0]);
-hiraganaBox.appendChild(div);
+}
+}
 });
-}
-loadHiragana();
-
-// ===================== KATAKANA =====================
-const katakana=[
-["ア","a"],["イ","i"],["ウ","u"],["エ","e"],["オ","o"],
-["カ","ka"],["キ","ki"],["ク","ku"],["ケ","ke"],["コ","ko"],
-["サ","sa"],["シ","shi"],["ス","su"],["セ","se"],["ソ","so"],
-["タ","ta"],["チ","chi"],["ツ","tsu"],["テ","te"],["ト","to"],
-["ナ","na"],["ニ","ni"],["ヌ","nu"],["ネ","ne"],["ノ","no"],
-["ハ","ha"],["ヒ","hi"],["フ","fu"],["ヘ","he"],["ホ","ho"],
-["マ","ma"],["ミ","mi"],["ム","mu"],["メ","me"],["モ","mo"],
-["ヤ","ya"],["ユ","yu"],["ヨ","yo"],
-["ラ","ra"],["リ","ri"],["ル","ru"],["レ","re"],["ロ","ro"],
-["ワ","wa"],["ヲ","wo"],["ン","n"]
-];
-
-function loadKatakana(){
-katakanaBox.innerHTML="";
-katakana.forEach(k=>{
-let div=document.createElement("div");
-div.className="card";
-div.innerHTML="<b style='font-size:22px'>"+k[0]+"</b> - "+k[1];
-div.onclick=()=>speak(k[0]);
-katakanaBox.appendChild(div);
-});
-}
-loadKatakana();
-
-// ===================== XP =====================
-let xp=parseInt(localStorage.getItem("xp")||0);
-let level=parseInt(localStorage.getItem("level")||1);
-
-function addXP(v){
-xp+=v;
-if(xp>=level*100){xp=0;level++;}
-localStorage.setItem("xp",xp);
-localStorage.setItem("level",level);
-updateUI();
-}
-function updateUI(){
-xpBar.style.width=(xp/(level*100))*100+"%";
-document.getElementById("xp").innerText=xp;
-document.getElementById("level").innerText=level;
-}
-updateUI();
-
-// TOAST
-function showToast(){
-toast.style.opacity=1;
-setTimeout(()=>toast.style.opacity=0,1500);
-}
-
-// AUDIO
-function speak(text){
-let u=new SpeechSynthesisUtterance(text);
-u.lang="ja-JP";
-speechSynthesis.speak(u);
-}
-
 </script>
+
 </body>
 </html>
+
